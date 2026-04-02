@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.campusconnect.model;
 
 import java.util.Date;
@@ -12,17 +9,17 @@ import java.util.Date;
  */
 public class Etudiant extends Personne{
     private String matricule;
-    private String anneeEtude;
+    private String niveau;
     private String filiere;
 
     public Etudiant() {
         super();
     }
     
-    public Etudiant(Integer id,String nom,String prenom,String email,Date datnaiss,String matricule, String anneeEtude, String filiere) {
+    public Etudiant(Integer id,String nom,String prenom,String email,Date datnaiss,String matricule, String niveau, String filiere) {
         super(id,nom,prenom,email,datnaiss);
         this.matricule = matricule;
-        this.anneeEtude = anneeEtude;
+        this.niveau = niveau;
         this.filiere = filiere;
     }
 
@@ -34,12 +31,12 @@ public class Etudiant extends Personne{
         this.matricule = matricule;
     }
 
-    public String getAnneeEtude() {
-        return anneeEtude;
+    public String getNiveau() {
+        return niveau;
     }
 
-    public void setAnneeEtude(String anneeEtude) {
-        this.anneeEtude = anneeEtude;
+    public void setNiveau(String niveau) {
+        this.niveau = niveau;
     }
 
     public String getFiliere() {

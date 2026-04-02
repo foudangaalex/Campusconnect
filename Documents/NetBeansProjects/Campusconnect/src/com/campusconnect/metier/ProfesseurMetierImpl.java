@@ -19,7 +19,7 @@ public class ProfesseurMetierImpl implements ProfesseurMetierI{
     private PreparedStatement pst;
     private ResultSet rs;
     private Connection con;
-    private List<Professeur> list;
+    
     @Override
     public Professeur create(Professeur prof) {
         try { 

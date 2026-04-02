@@ -4,6 +4,7 @@ package com.campusconnect.metier;
 import com.campusconnect.dao.ConnectionDao;
 import com.campusconnect.model.Etudiant;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,16 +28,18 @@ public class EtudiantMetierImpl implements EtudiantMetierI{
             
         try { 
             con=ConnectionDao.getConnection();
-            String query="INSERT INTO etudiant(id,nom,prenom,anneeEtude,mail,filiere,matricule,datnaiss) VALUES(?,?,?,?,?,?,?,?)";
+            String query="INSERT INTO etudiant(nom,prenom,niveau,email,filiere,matricule,datnaiss) VALUES(?,?,?,?,?,?,?)";
             pst= con.prepareStatement(query);
-            pst.setInt(0, e.getId());
+            //SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy");
+            // String datnaiss=format.format(e.getDatnaiss());
+            //pst.setInt(1, e.getId());
             pst.setString(1, e.getNom());
             pst.setString(2, e.getPrenom());
-            pst.setString(3, e.getAnneeEtude());
+            pst.setString(3, e.getNiveau());
             pst.setString(4, e.getEmail());
             pst.setString(5, e.getFiliere());
             pst.setString(6, e.getMatricule());
-            pst.setDate(7, (Date) e.getDatnaiss());
+            pst.setLong(7,e.getDatnaiss().getTime());
             int i=pst.executeUpdate();
             con.close();
         } catch (SQLException ex) {
@@ -48,24 +51,29 @@ public class EtudiantMetierImpl implements EtudiantMetierI{
     @Override
     public Etudiant modify(Integer id, Etudiant e) {
          
-         try {  
+           Optional <Etudiant> byId=findById(id);
+            if(byId.isPresent()){
+            try { 
+            
              con=ConnectionDao.getConnection();
-            String query="UPDATE etudiant SET nom=?,prenom=?,anneeEtude=?,email=?,filiere=?,matricule=?,datnaiss=? WHERE id=?";
+            String query="UPDATE etudiant SET nom=?,prenom=?,niveau=?,email=?,filiere=?,matricule=?,datnaiss=? WHERE id=?";
             pst= con.prepareStatement(query);
-            pst.setInt(7, e.getId());
-            pst.setString(0, e.getNom());
-            pst.setString(1, e.getPrenom());
-            pst.setString(2, e.getAnneeEtude());
-            pst.setString(3, e.getEmail());
-            pst.setString(4, e.getFiliere());
-            pst.setString(5, e.getMatricule());
-            pst.setDate(6, (Date) e.getDatnaiss());
+            pst.setInt(8, e.getId());
+            pst.setString(1, e.getNom());
+            pst.setString(2, e.getPrenom());
+            pst.setString(3, e.getNiveau());
+            pst.setString(4, e.getEmail());
+            pst.setString(5, e.getFiliere());
+            pst.setString(6, e.getMatricule());
+            pst.setLong(7,e.getDatnaiss().getTime());
             int i=pst.executeUpdate();
             con.close();
         } catch (Exception ex) {
              System.out.println(ex.getMessage());
         }
         return e;
+            }
+        return null;
     }
 
     @Override
@@ -74,7 +82,7 @@ public class EtudiantMetierImpl implements EtudiantMetierI{
              con=ConnectionDao.getConnection();
             String query="DELETE FROM etudiant WHERE id=?";
             pst= con.prepareStatement(query);
-            pst.setInt(0, id);
+            pst.setInt(1, id);
             int i=pst.executeUpdate();
             con.close();
         } catch (SQLException ex) {
@@ -95,10 +103,12 @@ public class EtudiantMetierImpl implements EtudiantMetierI{
                  Etudiant e=new Etudiant();
                  e.setNom(rs.getString("nom"));
                  e.setPrenom(rs.getString("prenom"));
-                 e.setAnneeEtude(rs.getString("anneeEtude"));
+                 e.setNiveau(rs.getString("niveau"));
+                 Long millis=rs.getLong("datnaiss");
+                 e.setDatnaiss(new Date(millis));
                  e.setEmail(rs.getString("email"));
                  e.setFiliere(rs.getString("filiere"));
-                 e.setMatricule("matricule");
+                 e.setMatricule(rs.getString("matricule"));
                  e.setId(rs.getInt("id"));
                  list.add(e);
              }
