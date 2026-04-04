@@ -35,12 +35,14 @@ public class Etudiant_view extends javax.swing.JPanel {
         model.setRowCount(0);
          List<Etudiant> etudiants = metier.show();
          etudiants.forEach(e->{
+             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-dd-MM");;
+             String dateAffichee = (e.getDatnaiss() != null) ? sdf.format(e.getDatnaiss()) : "";
               Object[] row = {
             e.getId(),
             e.getNom(),
             e.getPrenom(),
             e.getEmail(),
-            e.getDatnaiss(),
+            dateAffichee,
             e.getMatricule(),
             e.getNiveau(),
             e.getFiliere()
@@ -122,6 +124,11 @@ public class Etudiant_view extends javax.swing.JPanel {
                 jToggleButton1MouseClicked(evt);
             }
         });
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
 
         jToggleButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jToggleButton2.setText("SUPPRIMER");
@@ -130,12 +137,22 @@ public class Etudiant_view extends javax.swing.JPanel {
                 jToggleButton2MouseClicked(evt);
             }
         });
+        jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton2ActionPerformed(evt);
+            }
+        });
 
         jToggleButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jToggleButton3.setText("MODIFIER");
         jToggleButton3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jToggleButton3MouseClicked(evt);
+            }
+        });
+        jToggleButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton3ActionPerformed(evt);
             }
         });
 
@@ -247,6 +264,11 @@ public class Etudiant_view extends javax.swing.JPanel {
                 "ID", "NOM", "PRENOM", "EMAIL", "DATE DE NAISSANCE", "MATRICULE", "NIVEAU", "FILIERE"
             }
         ));
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -322,7 +344,54 @@ public class Etudiant_view extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextField7ActionPerformed
 
     private void jToggleButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton1MouseClicked
-         try {
+              
+    }//GEN-LAST:event_jToggleButton1MouseClicked
+
+    private void jToggleButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jToggleButton2MouseClicked
+
+    private void jToggleButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton3MouseClicked
+                 
+    }//GEN-LAST:event_jToggleButton3MouseClicked
+
+    private void jToggleButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton4MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jToggleButton4MouseClicked
+
+    private void jToggleButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
+              //MODIFIER    
+                   try {
+             Integer id=Integer.parseInt(idText.getText());
+             String nom=jTextField2.getText();
+             String prenom=jTextField6.getText();
+             String email=jTextField5.getText();
+             String datnaiss=jTextField7.getText();
+             String niveau=jTextField8.getText();
+             String matricule=jTextField3.getText();
+             String filiere=jTextField4.getText();
+             Etudiant et=new Etudiant();
+             et.setNom(nom);
+             et.setId(id);
+             et.setPrenom(prenom);
+             et.setFiliere(filiere);
+             et.setEmail(email);
+             et.setNiveau(niveau);
+             et.setMatricule(matricule);
+             SimpleDateFormat format=new SimpleDateFormat("yyyy-dd-MM");
+             et.setDatnaiss(format.parse(datnaiss));
+             metier.modify(id, et);
+             JOptionPane.showConfirmDialog(this, "  modification reussi?");
+             tableau();
+         } catch (ParseException ex) {
+             Logger.getLogger(Etudiant_view.class.getName()).log(Level.SEVERE, null, ex);
+         }
+     }//GEN-LAST:event_jToggleButton3ActionPerformed
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        //  AJOUTER
+          try {
+              
              String nom=jTextField2.getText();
              String prenom=jTextField6.getText();
              String email=jTextField5.getText();
@@ -337,7 +406,7 @@ public class Etudiant_view extends javax.swing.JPanel {
              et.setEmail(email);
              et.setNiveau(niveau);
              et.setMatricule(matricule);
-             SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy");
+             SimpleDateFormat format=new SimpleDateFormat("yyyy-dd-MM");
              et.setDatnaiss(format.parse(datnaiss));
              metier.create(et);
              JOptionPane.showConfirmDialog(this, "etudiant enregistrer");
@@ -346,22 +415,35 @@ public class Etudiant_view extends javax.swing.JPanel {
              Logger.getLogger(Etudiant_view.class.getName()).log(Level.SEVERE, null, ex);
          }
          
-         
-         
-        
-    }//GEN-LAST:event_jToggleButton1MouseClicked
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
-    private void jToggleButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton2MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jToggleButton2MouseClicked
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+         // AFFICHER LES ELEMENT DANS LES CHAMPS
+         int r = jTable2.getSelectedRow();
+             Integer id=Integer.parseInt(jTable2.getValueAt(r, 0).toString());
+             String nom=jTable2.getValueAt(r, 1).toString();
+             String prenom=jTable2.getValueAt(r, 2).toString();
+             String email=jTable2.getValueAt(r, 3).toString();
+             String datnaiss=jTable2.getValueAt(r, 4).toString();
+             String niveau=jTable2.getValueAt(r, 5).toString();
+             String matricule=jTable2.getValueAt(r, 6).toString();
+             String filiere=jTable2.getValueAt(r, 7).toString();
+             idText.setText(id.toString());
+             jTextField2.setText(nom);
+             jTextField6.setText(prenom);
+             jTextField5.setText(email);
+             jTextField7.setText(datnaiss);
+             jTextField8.setText(niveau);
+             jTextField3.setText(matricule);
+            jTextField4.setText(filiere);
+    }//GEN-LAST:event_jTable2MouseClicked
 
-    private void jToggleButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton3MouseClicked
-                 
-    }//GEN-LAST:event_jToggleButton3MouseClicked
-
-    private void jToggleButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton4MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jToggleButton4MouseClicked
+    private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
+        // SUPPRIMER;
+        Integer id=Integer.parseInt(idText.getText());
+        metier.delete(id);
+        tableau();
+    }//GEN-LAST:event_jToggleButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -24,15 +24,15 @@ public class ProfesseurMetierImpl implements ProfesseurMetierI{
     public Professeur create(Professeur prof) {
         try { 
             con=ConnectionDao.getConnection();
-            String query="INSERT INTO professeur(id,nom,prenom,email,departement,statut,datnaiss) VALUES(?,?,?,?,?,?,?)";
+            String query="INSERT INTO professeur(nom,prenom,email,departement,statut,datnaiss) VALUES(?,?,?,?,?,?)";
             pst= con.prepareStatement(query);
-            pst.setInt(0, prof.getId());
+           // pst.setInt(, prof.getId());
             pst.setString(1, prof.getNom());
             pst.setString(2, prof.getPrenom());
             pst.setString(3, prof.getEmail());
             pst.setString(4, prof.getDepartement());
             pst.setString(5, prof.getStatut());
-            pst.setDate(6, (Date) prof.getDatnaiss());
+            pst.setLong(6, prof.getDatnaiss().getTime());
             int i=pst.executeUpdate();
             con.close();
         } catch (Exception ex) {
@@ -48,13 +48,13 @@ public class ProfesseurMetierImpl implements ProfesseurMetierI{
              con=ConnectionDao.getConnection();
             String query="UPDATE professeur SET nom=?,prenom=?,email=?,departement=?,statut=?,datnaiss=? WHERE id=?";
             pst= con.prepareStatement(query);
-            pst.setInt(6, prof.getId());
-            pst.setString(0, prof.getNom());
-            pst.setString(1, prof.getPrenom());
-            pst.setString(2, prof.getEmail());
-            pst.setString(3, prof.getDepartement());
-            pst.setString(4, prof.getStatut());
-            pst.setDate(5, (Date) prof.getDatnaiss());
+            pst.setInt(7, prof.getId());
+            pst.setString(1, prof.getNom());
+            pst.setString(2, prof.getPrenom());
+            pst.setString(3, prof.getEmail());
+            pst.setString(4, prof.getDepartement());
+            pst.setString(5, prof.getStatut());
+            pst.setLong(6, prof.getDatnaiss().getTime());
             int i=pst.executeUpdate();
             con.close();
         } catch (Exception ex) {
@@ -69,7 +69,7 @@ public class ProfesseurMetierImpl implements ProfesseurMetierI{
              con=ConnectionDao.getConnection();
             String query="DELETE FROM professeur WHERE id=?";
             pst= con.prepareStatement(query);
-            pst.setInt(0, id);
+            pst.setInt(1, id);
             int i=pst.executeUpdate();
             con.close();
         } catch (SQLException ex) {
