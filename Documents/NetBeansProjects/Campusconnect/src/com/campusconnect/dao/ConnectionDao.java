@@ -16,7 +16,7 @@ public class ConnectionDao {
         try{
             Class.forName(DRIVER);
             con=DriverManager.getConnection(URL);
-            System.out.println("connection reussi");
+          //  System.out.println("connection reussi");
         }catch(Exception e){
             System.out.println(e.getMessage());
         }

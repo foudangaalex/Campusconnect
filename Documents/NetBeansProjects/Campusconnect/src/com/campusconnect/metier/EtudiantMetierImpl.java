@@ -30,16 +30,13 @@ public class EtudiantMetierImpl implements EtudiantMetierI{
             con=ConnectionDao.getConnection();
             String query="INSERT INTO etudiant(nom,prenom,niveau,email,filiere,matricule,datnaiss) VALUES(?,?,?,?,?,?,?)";
             pst= con.prepareStatement(query);
-            //SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy");
-            // String datnaiss=format.format(e.getDatnaiss());
-            //pst.setInt(1, e.getId());
             pst.setString(1, e.getNom());
             pst.setString(2, e.getPrenom());
             pst.setString(3, e.getNiveau());
             pst.setString(4, e.getEmail());
             pst.setString(5, e.getFiliere());
             pst.setString(6, e.getMatricule());
-            pst.setLong(7,e.getDatnaiss().getTime());
+            pst.setLong(7,   e.getDatnaiss().getTime());
             int i=pst.executeUpdate();
             con.close();
         } catch (SQLException ex) {
@@ -65,7 +62,7 @@ public class EtudiantMetierImpl implements EtudiantMetierI{
             pst.setString(4, e.getEmail());
             pst.setString(5, e.getFiliere());
             pst.setString(6, e.getMatricule());
-            pst.setLong(7,e.getDatnaiss().getTime());
+            pst.setLong(7, e.getDatnaiss().getTime());
             int i=pst.executeUpdate();
             con.close();
         } catch (Exception ex) {

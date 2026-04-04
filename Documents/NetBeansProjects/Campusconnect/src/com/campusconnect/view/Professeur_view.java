@@ -4,6 +4,15 @@
  */
 package com.campusconnect.view;
 
+import com.campusconnect.metier.ProfesseurMetierI;
+import com.campusconnect.metier.ProfesseurMetierImpl;
+import com.campusconnect.model.Professeur;
+import java.lang.System.Logger.Level;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 
 
 /**
@@ -12,13 +21,35 @@ package com.campusconnect.view;
  */
 public class Professeur_view extends javax.swing.JPanel {
 
-     
+     private ProfesseurMetierI metier;
     public Professeur_view() {
         initComponents();
-        
+        metier=new ProfesseurMetierImpl();
+        tableau();
     } 
 
-    
+    public void tableau(){
+        DefaultTableModel model=(DefaultTableModel) jTable2.getModel();
+        model.setRowCount(0);
+          
+         List<Professeur> profs = metier.show();
+         profs.forEach(prof->{
+             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+             String dateAffichee = sdf.format(prof.getDatnaiss()) ;
+              Object[] row = {
+            prof.getId(),
+            prof.getNom(),
+            prof.getPrenom(),
+            prof.getEmail(),
+            dateAffichee,
+            prof.getDepartement(),
+            prof.getStatut()
+            
+        };
+        model.addRow(row);
+         });
+         
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -81,35 +112,20 @@ public class Professeur_view extends javax.swing.JPanel {
 
         jToggleButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jToggleButton1.setText("AJOUTER");
-        jToggleButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jToggleButton1MouseClicked(evt);
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
             }
         });
 
         jToggleButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jToggleButton2.setText("SUPPRIMER");
-        jToggleButton2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jToggleButton2MouseClicked(evt);
-            }
-        });
 
         jToggleButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jToggleButton3.setText("MODIFIER");
-        jToggleButton3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jToggleButton3MouseClicked(evt);
-            }
-        });
 
         jToggleButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jToggleButton4.setText("CHERCHER");
-        jToggleButton4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jToggleButton4MouseClicked(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -242,7 +258,7 @@ public class Professeur_view extends javax.swing.JPanel {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(105, 105, 105))
             .addGroup(layout.createSequentialGroup()
-                .addGap(474, 474, 474)
+                .addGap(439, 439, 439)
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -276,23 +292,32 @@ public class Professeur_view extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField7ActionPerformed
 
-    private void jToggleButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton1MouseClicked
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        // AJOUTER
+         try {
               
-         
-        
-    }//GEN-LAST:event_jToggleButton1MouseClicked
-
-    private void jToggleButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton2MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jToggleButton2MouseClicked
-
-    private void jToggleButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton3MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jToggleButton3MouseClicked
-
-    private void jToggleButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton4MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jToggleButton4MouseClicked
+             String nom=jTextField2.getText();
+             String prenom=jTextField6.getText();
+             String email=jTextField5.getText();
+             String datnaiss=jTextField7.getText();
+             String departement=jTextField3.getText();
+             String statut=jTextField8.getText();
+             
+             Professeur  prof=new Professeur();
+             prof.setNom(nom);
+             prof.setPrenom(prenom);
+             prof.setEmail(email);
+             prof.setDepartement(departement);
+             prof.setStatut(statut);
+             SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy");
+             prof.setDatnaiss(format.parse(datnaiss));
+             metier.create(prof);
+             JOptionPane.showMessageDialog(this, "prof enregistrer");
+             tableau();
+         } catch (Exception ex) {
+             System.out.println(ex.getMessage());
+         }
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

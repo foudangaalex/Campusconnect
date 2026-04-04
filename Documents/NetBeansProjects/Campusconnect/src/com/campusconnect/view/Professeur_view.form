@@ -31,7 +31,7 @@
               <EmptySpace min="-2" pref="105" max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="474" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="439" max="-2" attributes="0"/>
               <Component id="jLabel9" min="-2" pref="245" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -228,7 +228,7 @@
             <Property name="text" type="java.lang.String" value="AJOUTER"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jToggleButton1MouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButton1ActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JToggleButton" name="jToggleButton2">
@@ -238,9 +238,6 @@
             </Property>
             <Property name="text" type="java.lang.String" value="SUPPRIMER"/>
           </Properties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jToggleButton2MouseClicked"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JToggleButton" name="jToggleButton3">
           <Properties>
@@ -249,9 +246,6 @@
             </Property>
             <Property name="text" type="java.lang.String" value="MODIFIER"/>
           </Properties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jToggleButton3MouseClicked"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JToggleButton" name="jToggleButton4">
           <Properties>
@@ -260,9 +254,6 @@
             </Property>
             <Property name="text" type="java.lang.String" value="CHERCHER"/>
           </Properties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jToggleButton4MouseClicked"/>
-          </Events>
         </Component>
       </SubComponents>
     </Container>
