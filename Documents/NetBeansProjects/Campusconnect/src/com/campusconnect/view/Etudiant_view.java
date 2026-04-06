@@ -35,7 +35,7 @@ public class Etudiant_view extends javax.swing.JPanel {
         model.setRowCount(0);
          List<Etudiant> etudiants = metier.show();
          etudiants.forEach(e->{
-             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-dd-MM");;
+             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-dd-MM");
              String dateAffichee = (e.getDatnaiss() != null) ? sdf.format(e.getDatnaiss()) : "";
               Object[] row = {
             e.getId(),
@@ -436,6 +436,7 @@ public class Etudiant_view extends javax.swing.JPanel {
              jTextField8.setText(niveau);
              jTextField3.setText(matricule);
             jTextField4.setText(filiere);
+            jTextField7.setText(datnaiss);
     }//GEN-LAST:event_jTable2MouseClicked
 
     private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed

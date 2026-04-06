@@ -18,7 +18,7 @@ public class Professeur extends Personne {
     }
 
     public Professeur() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        super();
     }
 
     public String getStatut() {
