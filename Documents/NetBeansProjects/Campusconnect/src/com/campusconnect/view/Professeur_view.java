@@ -7,7 +7,9 @@ package com.campusconnect.view;
 import com.campusconnect.metier.ProfesseurMetierI;
 import com.campusconnect.metier.ProfesseurMetierImpl;
 import com.campusconnect.model.Professeur;
+import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -34,8 +36,8 @@ public class Professeur_view extends javax.swing.JPanel {
           
          List<Professeur> profs = metier.show();
          profs.forEach(prof->{
-             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-             String dateAffichee = sdf.format(prof.getDatnaiss()) ;
+             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-dd-MM");
+             String dateAffichee = (prof.getDatnaiss() != null) ? sdf.format(prof.getDatnaiss()) : "";
               Object[] row = {
             prof.getId(),
             prof.getNom(),
@@ -123,6 +125,11 @@ public class Professeur_view extends javax.swing.JPanel {
 
         jToggleButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jToggleButton3.setText("MODIFIER");
+        jToggleButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton3ActionPerformed(evt);
+            }
+        });
 
         jToggleButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jToggleButton4.setText("CHERCHER");
@@ -218,6 +225,11 @@ public class Professeur_view extends javax.swing.JPanel {
                 "ID", "NOM", "PRENOM", "EMAIL", "DATE DE NAISSANCE", "DEPARTEMENT", "STATUT"
             }
         ));
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -309,7 +321,7 @@ public class Professeur_view extends javax.swing.JPanel {
              prof.setEmail(email);
              prof.setDepartement(departement);
              prof.setStatut(statut);
-             SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy");
+             SimpleDateFormat format=new SimpleDateFormat("yyyy-dd-MM");
              prof.setDatnaiss(format.parse(datnaiss));
              metier.create(prof);
              JOptionPane.showMessageDialog(this, "prof enregistrer");
@@ -318,6 +330,54 @@ public class Professeur_view extends javax.swing.JPanel {
              System.out.println(ex.getMessage());
          }
     }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+    private void jToggleButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
+        // MODIFIER
+                 try {
+             Integer id=Integer.parseInt(idText.getText());
+             String nom=jTextField2.getText();
+             String prenom=jTextField6.getText();
+             String email=jTextField5.getText();
+             String datnaiss=jTextField7.getText();
+             String departement=jTextField3.getText();
+             String statut=jTextField8.getText();
+             Professeur  prof=new Professeur();
+             prof.setNom(nom);
+             prof.setId(id);
+             prof.setPrenom(prenom);
+             prof.setEmail(email);
+             prof.setDepartement(departement);
+             prof.setStatut(statut);
+             SimpleDateFormat format=new SimpleDateFormat("yyyy-dd-MM");
+             prof.setDatnaiss(format.parse(datnaiss));
+             metier.modify(id, prof);
+             JOptionPane.showMessageDialog(this, "  modification reussi?");
+             tableau();
+         } catch (ParseException ex) {
+                     System.out.println(ex.getMessage());
+         }
+    }//GEN-LAST:event_jToggleButton3ActionPerformed
+
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        // TODO add your handling code here:
+         int r = jTable2.getSelectedRow();
+             Integer id=Integer.parseInt(jTable2.getValueAt(r, 0).toString());
+             String nom=jTable2.getValueAt(r, 1).toString();
+             String prenom=jTable2.getValueAt(r, 2).toString();
+             String email=jTable2.getValueAt(r, 3).toString();
+             String datnaiss=jTable2.getValueAt(r, 4).toString();
+             String departement=jTable2.getValueAt(r, 5).toString();
+             String statut=jTable2.getValueAt(r, 6).toString();
+             
+             idText.setText(id.toString());
+             jTextField2.setText(nom);
+             jTextField6.setText(prenom);
+             jTextField5.setText(email);
+             jTextField7.setText(datnaiss);
+             jTextField3.setText(departement);
+             jTextField8.setText(statut);
+            
+    }//GEN-LAST:event_jTable2MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

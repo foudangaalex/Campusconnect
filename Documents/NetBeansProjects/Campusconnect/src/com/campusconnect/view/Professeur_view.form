@@ -246,6 +246,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="MODIFIER"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButton3ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JToggleButton" name="jToggleButton4">
           <Properties>
@@ -353,6 +356,9 @@
                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTable2MouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
