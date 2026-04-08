@@ -46,6 +46,13 @@ public class Etudiant extends Personne{
     public void setFiliere(String filiere) {
         this.filiere = filiere;
     }
+
+    @Override
+    public String toString() {
+        return "Etudiant{" +"nom"+super.nom+ ",matricule=" + matricule + ", niveau=" + niveau + ", filiere=" + filiere + '}';
+    }
+
+   
     
     
 }

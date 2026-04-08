@@ -5,7 +5,7 @@
 package com.campusconnect.metier;
 
 import com.campusconnect.model.Departement;
-import com.campusconnect.model.Matiere;
+import com.campusconnect.model.Cours;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,10 +13,10 @@ import java.util.Optional;
  *
  * @author pc
  */
-public interface MatiereMetierI {
-    Matiere create(Matiere m);
-    Matiere modify(Integer id,Matiere m);
+public interface CourMetierI {
+    Cours create(Cours m);
+    Cours modify(Integer id,Cours m);
     String delete(Integer id);
-    List<Matiere> show();
-    Optional<Matiere> findById(Integer id);
+    List<Cours> show();
+    Optional<Cours> findById(Integer id);
 }
