@@ -64,5 +64,10 @@ public abstract class Personne {
     public void setDatnaiss(Date datnaiss) {
         this.datnaiss = datnaiss;
     }
+
+    @Override
+    public String toString() {
+        return "Personne{" + "id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", email=" + email + ", datnaiss=" + datnaiss + '}';
+    }
      
 }

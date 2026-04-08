@@ -5,9 +5,14 @@
 package com.campusconnect.view;
 
 import com.campusconnect.dao.ConnectionDao;
+import com.campusconnect.metier.CourMetierI;
+import com.campusconnect.metier.CourMetierImpl;
 import com.campusconnect.metier.EtudiantMetierI;
 import com.campusconnect.metier.EtudiantMetierImpl;
+import com.campusconnect.model.Cours;
 import com.campusconnect.model.Etudiant;
+import com.campusconnect.model.Niveau;
+import com.campusconnect.model.Professeur;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -21,31 +26,29 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author HP
  */
-public class Etudiant_view extends javax.swing.JPanel {
+public class Cour_view extends javax.swing.JPanel {
 
-     private EtudiantMetierI metier;
-    public Etudiant_view() {
+     private CourMetierI metier;
+    public Cour_view() {
         initComponents();
-        metier=new EtudiantMetierImpl();
+        metier=new CourMetierImpl();
         tableau();
     } 
 
     public void tableau(){
         DefaultTableModel model=(DefaultTableModel) jTable2.getModel();
         model.setRowCount(0);
-         List<Etudiant> etudiants = metier.show();
-         etudiants.forEach(e->{
-             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-dd-MM");
-             String dateAffichee = (e.getDatnaiss() != null) ? sdf.format(e.getDatnaiss()) : "";
+         List<Cours> cours = metier.show();
+          cours.forEach(c->{
               Object[] row = {
-            e.getId(),
-            e.getNom(),
-            e.getPrenom(),
-            e.getEmail(),
-            dateAffichee,
-            e.getMatricule(),
-            e.getNiveau(),
-            e.getFiliere()
+            c.getId(),
+            c.getNom(),
+            c.getCode(),
+            c.getNbre_heure(),
+            c.getCoef(),
+            c.getId_sal(),
+            c.getId_niv(),
+            c.getId_ens()
             
         };
         model.addRow(row);
@@ -67,15 +70,15 @@ public class Etudiant_view extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
         jTextField8 = new javax.swing.JTextField();
         jToggleButton1 = new javax.swing.JToggleButton();
         jToggleButton2 = new javax.swing.JToggleButton();
         jToggleButton3 = new javax.swing.JToggleButton();
         jToggleButton4 = new javax.swing.JToggleButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBox3 = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -87,17 +90,17 @@ public class Etudiant_view extends javax.swing.JPanel {
 
         jLabel2.setText("NOM");
 
-        jLabel3.setText("PRENOM");
+        jLabel3.setText("CODE");
 
-        jLabel4.setText("EMAIL");
+        jLabel4.setText("ID_ENS");
 
-        jLabel5.setText("DATE NAISSANCE");
+        jLabel5.setText("ID_NIV");
 
-        jLabel6.setText("MATRICULE");
+        jLabel6.setText("NBRE_HEURE");
 
-        jLabel7.setText("NIVEAU");
+        jLabel7.setText("COEF");
 
-        jLabel8.setText("FILIERE");
+        jLabel8.setText("ID_SAL");
 
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,12 +111,6 @@ public class Etudiant_view extends javax.swing.JPanel {
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
-            }
-        });
-
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
             }
         });
 
@@ -164,6 +161,12 @@ public class Etudiant_view extends javax.swing.JPanel {
             }
         });
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -171,7 +174,7 @@ public class Etudiant_view extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(18, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
@@ -187,11 +190,11 @@ public class Etudiant_view extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
@@ -199,7 +202,7 @@ public class Etudiant_view extends javax.swing.JPanel {
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addComponent(jToggleButton1)
@@ -222,15 +225,18 @@ public class Etudiant_view extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                    .addComponent(jComboBox1))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -238,11 +244,15 @@ public class Etudiant_view extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jToggleButton1)
                     .addComponent(jToggleButton3)
@@ -261,7 +271,7 @@ public class Etudiant_view extends javax.swing.JPanel {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "NOM", "PRENOM", "EMAIL", "DATE DE NAISSANCE", "MATRICULE", "NIVEAU", "FILIERE"
+                "ID", "NOM", "CODE", "ID_ENS", "ID_NIV", "NBRE_HEURE", "COEF", "ID_SAL"
             }
         ));
         jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -339,10 +349,6 @@ public class Etudiant_view extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
-
     private void jToggleButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jToggleButton1MouseClicked
               
     }//GEN-LAST:event_jToggleButton1MouseClicked
@@ -364,27 +370,19 @@ public class Etudiant_view extends javax.swing.JPanel {
                    try {
              Integer id=Integer.parseInt(idText.getText());
              String nom=jTextField2.getText();
-             String prenom=jTextField6.getText();
-             String email=jTextField5.getText();
-             String datnaiss=jTextField7.getText();
-             String niveau=jTextField8.getText();
-             String matricule=jTextField3.getText();
-             String filiere=jTextField4.getText();
-             Etudiant et=new Etudiant();
-             et.setNom(nom);
-             et.setId(id);
-             et.setPrenom(prenom);
-             et.setFiliere(filiere);
-             et.setEmail(email);
-             et.setNiveau(niveau);
-             et.setMatricule(matricule);
-             SimpleDateFormat format=new SimpleDateFormat("yyyy-dd-MM");
-             et.setDatnaiss(format.parse(datnaiss));
-             metier.modify(id, et);
+             String code=jTextField6.getText();
+             Professeur  prof=(Professeur) jComboBox1.getSelectedItem();
+             Niveau niveau=(Niveau) jComboBox2.getSelectedItem();
+             Cours cour=new Cours();
+             cour.setNom(nom);
+             cour.setId_ens(prof.getId());
+             cour.setId_niv(niveau.getId());
+             
+             metier.modify(id, cour);
              JOptionPane.showConfirmDialog(this, "  modification reussi?");
              tableau();
-         } catch (ParseException ex) {
-             Logger.getLogger(Etudiant_view.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (Exception ex) {
+             Logger.getLogger(Cour_view.class.getName()).log(Level.SEVERE, null, ex);
          }
      }//GEN-LAST:event_jToggleButton3ActionPerformed
 
@@ -392,27 +390,20 @@ public class Etudiant_view extends javax.swing.JPanel {
         //  AJOUTER
           try {
               
+             Integer id=Integer.parseInt(idText.getText());
              String nom=jTextField2.getText();
-             String prenom=jTextField6.getText();
-             String email=jTextField5.getText();
-             String datnaiss=jTextField7.getText();
-             String niveau=jTextField8.getText();
-             String matricule=jTextField3.getText();
-             String filiere=jTextField4.getText();
-             Etudiant et=new Etudiant();
-             et.setNom(nom);
-             et.setPrenom(prenom);
-             et.setFiliere(filiere);
-             et.setEmail(email);
-             et.setNiveau(niveau);
-             et.setMatricule(matricule);
-             SimpleDateFormat format=new SimpleDateFormat("yyyy-dd-MM");
-             et.setDatnaiss(format.parse(datnaiss));
-             metier.create(et);
-             JOptionPane.showConfirmDialog(this, "etudiant enregistrer");
+             String code=jTextField6.getText();
+             Professeur  prof=(Professeur) jComboBox1.getSelectedItem();
+             Niveau niveau=(Niveau) jComboBox2.getSelectedItem();
+             Cours cour=new Cours();
+             cour.setNom(nom);
+             cour.setId_ens(prof.getId());
+             cour.setId_niv(niveau.getId());
+             metier.create(cour);
+             JOptionPane.showConfirmDialog(this, "enregistrer");
              tableau();
-         } catch (ParseException ex) {
-             Logger.getLogger(Etudiant_view.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (Exception ex) {
+             Logger.getLogger(Cour_view.class.getName()).log(Level.SEVERE, null, ex);
          }
          
     }//GEN-LAST:event_jToggleButton1ActionPerformed
@@ -422,21 +413,10 @@ public class Etudiant_view extends javax.swing.JPanel {
          int r = jTable2.getSelectedRow();
              Integer id=Integer.parseInt(jTable2.getValueAt(r, 0).toString());
              String nom=jTable2.getValueAt(r, 1).toString();
-             String prenom=jTable2.getValueAt(r, 2).toString();
-             String email=jTable2.getValueAt(r, 3).toString();
-             String datnaiss=jTable2.getValueAt(r, 4).toString();
-             String niveau=jTable2.getValueAt(r, 5).toString();
-             String matricule=jTable2.getValueAt(r, 6).toString();
-             String filiere=jTable2.getValueAt(r, 7).toString();
              idText.setText(id.toString());
              jTextField2.setText(nom);
-             jTextField6.setText(prenom);
-             jTextField5.setText(email);
-             jTextField7.setText(datnaiss);
-             jTextField8.setText(niveau);
-             jTextField3.setText(matricule);
-            jTextField4.setText(filiere);
-            jTextField7.setText(datnaiss);
+             
+             
     }//GEN-LAST:event_jTable2MouseClicked
 
     private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
@@ -449,6 +429,9 @@ public class Etudiant_view extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField idText;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -464,10 +447,7 @@ public class Etudiant_view extends javax.swing.JPanel {
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;

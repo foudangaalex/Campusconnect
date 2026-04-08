@@ -8,15 +8,17 @@ package com.campusconnect.model;
  *
  * @author pc
  */
-public class Matiere {
-    private Integer id;
-    private String code;
-    private String nom;
-    public Matiere(){}
-    public Matiere(Integer id, String code, String nom) {
+public class Salle {
+   private Integer id;
+   private String nom;
+   private Integer cap_max;
+   
+   public Salle(){}
+
+    public Salle(Integer id, String name, Integer cap_max) {
         this.id = id;
-        this.code = code;
-        this.nom = nom;
+        this.nom = name;
+        this.cap_max = cap_max;
     }
 
     public Integer getId() {
@@ -27,14 +29,6 @@ public class Matiere {
         this.id = id;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public String getNom() {
         return nom;
     }
@@ -42,5 +36,13 @@ public class Matiere {
     public void setNom(String nom) {
         this.nom = nom;
     }
-    
+
+    public Integer getCap_max() {
+        return cap_max;
+    }
+
+    public void setCap_max(Integer cap_max) {
+        this.cap_max = cap_max;
+    }
+   
 }
