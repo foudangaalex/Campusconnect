@@ -49,7 +49,6 @@ public class Cour_view extends javax.swing.JPanel {
             c.getId_sal(),
             c.getId_niv(),
             c.getId_ens()
-            
         };
         model.addRow(row);
          });

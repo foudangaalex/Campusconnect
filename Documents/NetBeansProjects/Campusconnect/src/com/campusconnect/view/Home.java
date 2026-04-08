@@ -212,7 +212,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_jToggleButton10ActionPerformed
 
     private void jToggleButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton5ActionPerformed
-        // TODO add your handling code here:
+        
         Salle_view sal = new Salle_view();
         mainNavigation.JpanelLoader(navigation,sal);
     }//GEN-LAST:event_jToggleButton5ActionPerformed
