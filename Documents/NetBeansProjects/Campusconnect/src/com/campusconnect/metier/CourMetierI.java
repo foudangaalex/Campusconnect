@@ -6,6 +6,7 @@ package com.campusconnect.metier;
 
 import com.campusconnect.model.Departement;
 import com.campusconnect.model.Cours;
+import dtos.CourDTO;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,6 @@ public interface CourMetierI {
     Cours create(Cours m);
     Cours modify(Integer id,Cours m);
     String delete(Integer id);
-    List<Cours> show();
-    Optional<Cours> findById(Integer id);
+    List<CourDTO> show();
+    Optional<CourDTO> findById(Integer id);
 }

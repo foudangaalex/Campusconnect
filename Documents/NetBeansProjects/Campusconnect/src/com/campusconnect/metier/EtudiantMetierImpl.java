@@ -3,6 +3,7 @@ package com.campusconnect.metier;
 
 import com.campusconnect.dao.ConnectionDao;
 import com.campusconnect.model.Etudiant;
+import dtos.EtudiantDTO;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,13 +29,13 @@ public class EtudiantMetierImpl implements EtudiantMetierI{
             
         try { 
             con=ConnectionDao.getConnection();
-            String query="INSERT INTO etudiant(nom,prenom,niveau,email,filiere,matricule,datnaiss) VALUES(?,?,?,?,?,?,?)";
+            String query="INSERT INTO etudiant(nom,prenom,id_niveau,email,id_filiere,matricule,datnaiss) VALUES(?,?,?,?,?,?,?)";
             pst= con.prepareStatement(query);
             pst.setString(1, e.getNom());
             pst.setString(2, e.getPrenom());
-            pst.setString(3, e.getNiveau());
+            pst.setInt(3, e.getNiveau());
             pst.setString(4, e.getEmail());
-            pst.setString(5, e.getFiliere());
+            pst.setInt(5, e.getFiliere());
             pst.setString(6, e.getMatricule());
             pst.setLong(7,   e.getDatnaiss().getTime());
             int i=pst.executeUpdate();
@@ -48,19 +49,19 @@ public class EtudiantMetierImpl implements EtudiantMetierI{
     @Override
     public Etudiant modify(Integer id, Etudiant e) {
          
-           Optional <Etudiant> byId=findById(id);
+           Optional <EtudiantDTO> byId=findById(id);
             if(byId.isPresent()){
             try { 
             
              con=ConnectionDao.getConnection();
-            String query="UPDATE etudiant SET nom=?,prenom=?,niveau=?,email=?,filiere=?,matricule=?,datnaiss=? WHERE id=?";
+            String query="UPDATE etudiant SET nom=?,prenom=?,id_niveau=?,email=?,id_filiere=?,matricule=?,datnaiss=? WHERE id=?";
             pst= con.prepareStatement(query);
             pst.setInt(8, e.getId());
             pst.setString(1, e.getNom());
             pst.setString(2, e.getPrenom());
-            pst.setString(3, e.getNiveau());
+            pst.setInt(3, e.getNiveau());
             pst.setString(4, e.getEmail());
-            pst.setString(5, e.getFiliere());
+            pst.setInt(5, e.getFiliere());
             pst.setString(6, e.getMatricule());
             pst.setLong(7, e.getDatnaiss().getTime());
             int i=pst.executeUpdate();
@@ -88,25 +89,25 @@ public class EtudiantMetierImpl implements EtudiantMetierI{
     }
 
     @Override
-    public List<Etudiant> show() {
-        List<Etudiant> list=new ArrayList();
+    public List<EtudiantDTO> show() {
+        List<EtudiantDTO> list=new ArrayList();
         try {
             con=ConnectionDao.getConnection();
-            String query="SELECT * FROM etudiant";
+            String query="SELECT e.*,niv.nom as nom_niv,fil.nom as nom_fil FROM etudiant e JOIN niveau niv ON e.id_niveau = niv.id JOIN filiere fil ON e.id_filiere = fil.id";
             st= con.createStatement();
             rs=st.executeQuery(query);
             
              while(rs.next()){
-                 Etudiant e=new Etudiant();
+                 EtudiantDTO e=new EtudiantDTO();
+                 e.setId(rs.getInt("id"));
                  e.setNom(rs.getString("nom"));
                  e.setPrenom(rs.getString("prenom"));
-                 e.setNiveau(rs.getString("niveau"));
+                 e.setNom_niv(rs.getString("nom_niv"));
                  Long millis=rs.getLong("datnaiss");
                  e.setDatnaiss(new Date(millis));
                  e.setEmail(rs.getString("email"));
-                 e.setFiliere(rs.getString("filiere"));
+                 e.setNom_fil(rs.getString("nom_fil"));
                  e.setMatricule(rs.getString("matricule"));
-                 e.setId(rs.getInt("id"));
                  list.add(e);
              }
              con.close();
@@ -116,8 +117,8 @@ public class EtudiantMetierImpl implements EtudiantMetierI{
     }
 
     @Override
-    public Optional<Etudiant> findById(Integer id) {
-        List<Etudiant> list=show();
+    public Optional<EtudiantDTO> findById(Integer id) {
+        List<EtudiantDTO> list=show();
         return list.stream().filter(e->Objects.equals(e.getId(), id)).findFirst();
         
     }

@@ -4,8 +4,9 @@
  */
 package com.campusconnect.metier;
 
-import com.campusconnect.model.Etudiant;
-import dtos.EtudiantDTO;
+import com.campusconnect.model.Filiere;
+import com.campusconnect.model.Niveau;
+import dtos.FiliereDTO;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,10 +14,10 @@ import java.util.Optional;
  *
  * @author pc
  */
-public interface EtudiantMetierI {
-    Etudiant create(Etudiant e);
-    Etudiant modify(Integer id,Etudiant e);
+public interface FiliereMetierI {
+    Filiere create(Filiere fil);
+    Filiere modify(Integer id,Filiere fil);
     String delete(Integer id);
-    List<EtudiantDTO> show();
-    Optional<EtudiantDTO> findById(Integer id);
+    List<FiliereDTO> show();
+    Optional<FiliereDTO> findById(Integer id);
 }

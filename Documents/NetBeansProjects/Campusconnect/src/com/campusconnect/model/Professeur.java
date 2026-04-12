@@ -9,12 +9,12 @@ import java.util.Date;
  */
 public class Professeur extends Personne {
     private String statut;
-    private String departement;
+    private Integer id_dept;
 
-    public Professeur(Integer id, String nom, String prenom, String email, Date datnaiss,String statut,String departement) {
+    public Professeur(Integer id, String nom, String prenom, String email, Date datnaiss,String statut,Integer id_dept) {
         super(id, nom, prenom, email, datnaiss);
         this.statut=statut;
-        this.departement=departement;
+        this.id_dept=id_dept;
     }
 
     public Professeur() {
@@ -29,12 +29,18 @@ public class Professeur extends Personne {
         this.statut = statut;
     }
 
-    public String getDepartement() {
-        return departement;
+    public Integer getId_dept() {
+        return id_dept;
     }
 
-    public void setDepartement(String departement) {
-        this.departement = departement;
+    public void setId_dept(Integer id_dept) {
+        this.id_dept = id_dept;
+    }
+
+
+    @Override
+    public String toString() {
+        return statut ;
     }
     
 }

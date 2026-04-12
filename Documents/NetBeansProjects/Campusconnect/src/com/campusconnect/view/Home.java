@@ -196,7 +196,8 @@ public class Home extends javax.swing.JFrame {
 
     private void jToggleButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton4ActionPerformed
         // TODO add your handling code here:
-        
+        Cour_view cour = new Cour_view();
+        mainNavigation.JpanelLoader(navigation,cour);
     }//GEN-LAST:event_jToggleButton4ActionPerformed
 
     private void jToggleButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton9ActionPerformed

@@ -2,22 +2,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.campusconnect.model;
+package dtos;
 
 /**
  *
  * @author pc
  */
-public class Departement {
-    private Integer id;
+public class FiliereDTO {
+     private Integer id;
     private String nom;
+    
+    public FiliereDTO(){};
 
-    public Departement(){
-    }
-    public Departement(Integer id, String nom) {
+    public FiliereDTO(Integer id, String nom) {
         this.id = id;
         this.nom = nom;
-    }
+    };
 
     public Integer getId() {
         return id;
@@ -37,8 +37,6 @@ public class Departement {
 
     @Override
     public String toString() {
-        return nom ;
+        return  nom ;
     }
-    
-    
 }
