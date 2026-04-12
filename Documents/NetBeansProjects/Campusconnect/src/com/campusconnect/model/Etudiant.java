@@ -9,14 +9,14 @@ import java.util.Date;
  */
 public class Etudiant extends Personne{
     private String matricule;
-    private String niveau;
-    private String filiere;
+    private Integer niveau;
+    private Integer filiere;
 
     public Etudiant() {
         super();
     }
     
-    public Etudiant(Integer id,String nom,String prenom,String email,Date datnaiss,String matricule, String niveau, String filiere) {
+    public Etudiant(Integer id,String nom,String prenom,String email,Date datnaiss,String matricule, Integer niveau, Integer filiere) {
         super(id,nom,prenom,email,datnaiss);
         this.matricule = matricule;
         this.niveau = niveau;
@@ -31,19 +31,19 @@ public class Etudiant extends Personne{
         this.matricule = matricule;
     }
 
-    public String getNiveau() {
+    public Integer getNiveau() {
         return niveau;
     }
 
-    public void setNiveau(String niveau) {
+    public void setNiveau(Integer niveau) {
         this.niveau = niveau;
     }
 
-    public String getFiliere() {
+    public Integer getFiliere() {
         return filiere;
     }
 
-    public void setFiliere(String filiere) {
+    public void setFiliere(Integer filiere) {
         this.filiere = filiere;
     }
 

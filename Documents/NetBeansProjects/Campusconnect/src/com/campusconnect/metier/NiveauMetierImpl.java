@@ -6,6 +6,7 @@ package com.campusconnect.metier;
 
 import com.campusconnect.dao.ConnectionDao;
 import com.campusconnect.model.Niveau;
+import dtos.NiveauDTO;
 import java.util.List;
 import java.util.Optional;
 import java.sql.*;
@@ -41,12 +42,14 @@ public class NiveauMetierImpl implements NiveauMetierI{
     @Override
     public Niveau modify(Integer id, Niveau niv) {
          con=ConnectionDao.getConnection();
-        String sql="UPDATE niveau SET nom=? WHERE id=?";
-        if(findById(id).isPresent()){
+        String sql="UPDATE niveau SET nom=?, id_dept=? WHERE id=?";
+        
              try {
             pst=con.prepareStatement(sql);
             pst.setString(1, niv.getNom());
-            pst.setInt(2, niv.getId());
+            pst.setInt(2, niv.getId_dept());
+            pst.setInt(3, niv.getId());
+            
             int executeUpdate = pst.executeUpdate();
             con.close();
         } catch (SQLException ex) {
@@ -54,39 +57,39 @@ public class NiveauMetierImpl implements NiveauMetierI{
         }
         
         return niv;
-        }
-       return null;
+       
     }
 
     @Override
     public String delete(Integer id) {
-         if(findById(id).isPresent()){
+         
              try {
             con=ConnectionDao.getConnection();
-            String sql="DELETE niveau WHERE id=?";
+            String sql="DELETE FROM niveau WHERE id=?";
             pst=con.prepareStatement(sql);
+            pst.setInt(1,id);
             int executeUpdate = pst.executeUpdate();
             con.close();
         } catch (SQLException ex) {
                  System.out.println(ex.getMessage());
         }
          return "niveau supprimer avec succes";
-        }
-       return null;
+       
     }
 
     @Override
-    public List<Niveau> show() {
+    public List<NiveauDTO> show() {
         con=ConnectionDao.getConnection();
-        String sql="SELECT * FROM niveau";
-        List<Niveau> niveaux=new ArrayList<>();
+        String sql="SELECT niv.*,dept.nom as nom_dept FROM niveau niv JOIN departement dept ON niv.id_dept=dept.id ";
+        List<NiveauDTO> niveaux=new ArrayList<>();
         try {
             st=con.createStatement();
             rs=st.executeQuery(sql);
             while(rs.next()){
-               Niveau niv=new Niveau();
+               NiveauDTO niv=new NiveauDTO();
                niv.setId(rs.getInt("id"));
-               niv.setNom(rs.getString("nom"));
+               niv.setNom_niv(rs.getString("nom"));
+               niv.setNom_dept(rs.getString("nom_dept"));
                niveaux.add(niv);
             }
             con.close();
@@ -97,7 +100,7 @@ public class NiveauMetierImpl implements NiveauMetierI{
     }
 
     @Override
-    public Optional<Niveau> findById(Integer id) {
+    public Optional<NiveauDTO> findById(Integer id) {
        return show().stream().filter(d->Objects.equals(d.getId(), id)).findFirst();
     }
     

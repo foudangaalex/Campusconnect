@@ -9,16 +9,27 @@ import com.campusconnect.metier.CourMetierI;
 import com.campusconnect.metier.CourMetierImpl;
 import com.campusconnect.metier.EtudiantMetierI;
 import com.campusconnect.metier.EtudiantMetierImpl;
+import com.campusconnect.metier.NiveauMetierI;
+import com.campusconnect.metier.NiveauMetierImpl;
+import com.campusconnect.metier.ProfesseurMetierI;
+import com.campusconnect.metier.ProfesseurMetierImpl;
+import com.campusconnect.metier.SalleMetierImpl;
+import com.campusconnect.metier.SalletMetierI;
 import com.campusconnect.model.Cours;
 import com.campusconnect.model.Etudiant;
 import com.campusconnect.model.Niveau;
 import com.campusconnect.model.Professeur;
+import com.campusconnect.model.Salle;
+import dtos.CourDTO;
+import dtos.NiveauDTO;
+import dtos.ProfesseurDTO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -29,30 +40,71 @@ import javax.swing.table.DefaultTableModel;
 public class Cour_view extends javax.swing.JPanel {
 
      private CourMetierI metier;
+     private ProfesseurMetierI profs;
+     private NiveauMetierI niveaux;
+     private SalletMetierI salles;
+     
     public Cour_view() {
         initComponents();
+        idText.setVisible(false);
         metier=new CourMetierImpl();
         tableau();
+        initialiserComboBox();
     } 
-
+    private Object findItemByString(JComboBox combo, String name) {
+          for (int i = 0; i < combo.getItemCount(); i++) {
+        if (combo.getItemAt(i).toString().equals(name)) {
+            return combo.getItemAt(i);
+        }
+    }
+    return null;
+    }
     public void tableau(){
         DefaultTableModel model=(DefaultTableModel) jTable2.getModel();
         model.setRowCount(0);
-         List<Cours> cours = metier.show();
+         List<CourDTO> cours = metier.show();
           cours.forEach(c->{
               Object[] row = {
             c.getId(),
             c.getNom(),
             c.getCode(),
+            c.getNom_prof(),
+            c.getNom_niv(),
             c.getNbre_heure(),
             c.getCoef(),
-            c.getId_sal(),
-            c.getId_niv(),
-            c.getId_ens()
+            c.getNom_sal()
         };
         model.addRow(row);
          });
          
+    }
+    
+  
+    public void initialiserComboBox() {
+        //Profs 
+        
+        profs = new ProfesseurMetierImpl();
+        List<ProfesseurDTO> liste = profs.show(); // Méthode supposée dans votre Impl
+        jComboBox1.removeAllItems();
+        for (ProfesseurDTO c : liste) {
+            jComboBox1.addItem(c.getNom()+" "+c.getStatut());
+        }
+    
+        //Niveaux 
+        niveaux = new NiveauMetierImpl();
+        List<NiveauDTO> nivs = niveaux.show(); // Méthode supposée dans votre Impl
+        jComboBox2.removeAllItems();
+        for (NiveauDTO c : nivs) {
+            jComboBox2.addItem(c.getNom_niv());
+        }
+        
+        //Salles 
+        salles = new SalleMetierImpl();
+        List<Salle> sals = salles.show(); // Méthode supposée dans votre Impl
+        jComboBox3.removeAllItems();
+        for (Salle c : sals) {
+            jComboBox3.addItem(c.getNom());
+        }
     }
     
     @SuppressWarnings("unchecked")
@@ -78,11 +130,10 @@ public class Cour_view extends javax.swing.JPanel {
         jComboBox1 = new javax.swing.JComboBox<>();
         jComboBox2 = new javax.swing.JComboBox<>();
         jComboBox3 = new javax.swing.JComboBox<>();
+        idText = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        idText = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -91,15 +142,15 @@ public class Cour_view extends javax.swing.JPanel {
 
         jLabel3.setText("CODE");
 
-        jLabel4.setText("ID_ENS");
+        jLabel4.setText("ENSEIGNANT");
 
-        jLabel5.setText("ID_NIV");
+        jLabel5.setText("NIVEAU");
 
         jLabel6.setText("NBRE_HEURE");
 
         jLabel7.setText("COEF");
 
-        jLabel8.setText("ID_SAL");
+        jLabel8.setText("SALLE");
 
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -160,7 +211,12 @@ public class Cour_view extends javax.swing.JPanel {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setSelectedItem(toString());
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -173,35 +229,6 @@ public class Cour_view extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(18, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addComponent(jToggleButton1)
@@ -210,13 +237,46 @@ public class Cour_view extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(jToggleButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jToggleButton4)))
+                        .addComponent(jToggleButton4))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(idText, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addGap(67, 67, 67))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(89, 89, 89)
+                .addGap(28, 28, 28)
+                .addComponent(idText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -270,7 +330,7 @@ public class Cour_view extends javax.swing.JPanel {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "NOM", "CODE", "ID_ENS", "ID_NIV", "NBRE_HEURE", "COEF", "ID_SAL"
+                "ID", "NOM", "CODE", "PROFESSEUR", "NIVEAU", "NOMBRE D'HEURE", "COEF", "SALLE"
             }
         ));
         jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -295,12 +355,9 @@ public class Cour_view extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel1.setText("ID");
-
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("ENREGISTRER LES ETUDIANTS");
+        jLabel9.setText("ENREGISTRER LES COURS");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -308,12 +365,7 @@ public class Cour_view extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(40, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)
-                        .addComponent(idText, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(48, 48, 48)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(105, 105, 105))
@@ -327,15 +379,13 @@ public class Cour_view extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(idText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(57, 57, 57)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -370,12 +420,17 @@ public class Cour_view extends javax.swing.JPanel {
              Integer id=Integer.parseInt(idText.getText());
              String nom=jTextField2.getText();
              String code=jTextField6.getText();
-             Professeur  prof=(Professeur) jComboBox1.getSelectedItem();
-             Niveau niveau=(Niveau) jComboBox2.getSelectedItem();
+             String nbre_h=jTextField3.getText();
+             String coef=jTextField8.getText();
+             ProfesseurDTO  prof=(ProfesseurDTO) jComboBox1.getSelectedItem();
+             NiveauDTO niveau=(NiveauDTO) jComboBox2.getSelectedItem();
+             Salle salle=(Salle) jComboBox3.getSelectedItem();
+             
              Cours cour=new Cours();
              cour.setNom(nom);
-             cour.setId_ens(prof.getId());
+             cour.setId_prof(prof.getId());
              cour.setId_niv(niveau.getId());
+             cour.setId_sal(salle.getId());
              
              metier.modify(id, cour);
              JOptionPane.showConfirmDialog(this, "  modification reussi?");
@@ -392,12 +447,16 @@ public class Cour_view extends javax.swing.JPanel {
              Integer id=Integer.parseInt(idText.getText());
              String nom=jTextField2.getText();
              String code=jTextField6.getText();
-             Professeur  prof=(Professeur) jComboBox1.getSelectedItem();
-             Niveau niveau=(Niveau) jComboBox2.getSelectedItem();
+             String nbre_h=jTextField3.getText();
+             String coef=jTextField8.getText();
+             ProfesseurDTO  prof=(ProfesseurDTO) jComboBox1.getSelectedItem();
+             NiveauDTO niveau=(NiveauDTO) jComboBox2.getSelectedItem();
+             Salle salle=(Salle) jComboBox3.getSelectedItem();
              Cours cour=new Cours();
              cour.setNom(nom);
-             cour.setId_ens(prof.getId());
+             cour.setId_prof(prof.getId());
              cour.setId_niv(niveau.getId());
+             cour.setId_sal(salle.getId());
              metier.create(cour);
              JOptionPane.showConfirmDialog(this, "enregistrer");
              tableau();
@@ -412,8 +471,21 @@ public class Cour_view extends javax.swing.JPanel {
          int r = jTable2.getSelectedRow();
              Integer id=Integer.parseInt(jTable2.getValueAt(r, 0).toString());
              String nom=jTable2.getValueAt(r, 1).toString();
+             String code=jTable2.getValueAt(r, 2).toString();
+             String prof=jTable2.getValueAt(r, 3).toString();
+             String niveau=jTable2.getValueAt(r, 4).toString();
+             String nbre_h=jTable2.getValueAt(r, 5).toString();
+             String coef=jTable2.getValueAt(r, 6).toString();
+             String salle=jTable2.getValueAt(r, 7).toString();
              idText.setText(id.toString());
              jTextField2.setText(nom);
+             jTextField6.setText(code);
+             jTextField3.setText(nbre_h);
+             jTextField8.setText(coef);
+             jComboBox1.setSelectedItem(findItemByString(jComboBox1, prof));
+            jComboBox2.setSelectedItem(findItemByString(jComboBox2, niveau));
+            jComboBox3.setSelectedItem(findItemByString(jComboBox3, salle));
+             
              
              
     }//GEN-LAST:event_jTable2MouseClicked
@@ -425,13 +497,16 @@ public class Cour_view extends javax.swing.JPanel {
         tableau();
     }//GEN-LAST:event_jToggleButton2ActionPerformed
 
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField idText;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

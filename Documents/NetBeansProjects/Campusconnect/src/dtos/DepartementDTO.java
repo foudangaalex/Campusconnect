@@ -2,19 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.campusconnect.model;
+package dtos;
 
 /**
  *
  * @author pc
  */
-public class Departement {
+public class DepartementDTO {
     private Integer id;
     private String nom;
-
-    public Departement(){
-    }
-    public Departement(Integer id, String nom) {
+ 
+    public DepartementDTO(){};
+    public DepartementDTO(Integer id, String nom) {
         this.id = id;
         this.nom = nom;
     }
@@ -39,6 +38,5 @@ public class Departement {
     public String toString() {
         return nom ;
     }
-    
     
 }

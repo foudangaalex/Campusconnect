@@ -8,13 +8,13 @@ package com.campusconnect.model;
  *
  * @author pc
  */
-public class Departement {
+public class Filiere {
     private Integer id;
     private String nom;
+    
+    public Filiere(){}
 
-    public Departement(){
-    }
-    public Departement(Integer id, String nom) {
+    public Filiere(Integer id, String nom) {
         this.id = id;
         this.nom = nom;
     }
@@ -37,8 +37,7 @@ public class Departement {
 
     @Override
     public String toString() {
-        return nom ;
+        return  nom ;
     }
-    
     
 }

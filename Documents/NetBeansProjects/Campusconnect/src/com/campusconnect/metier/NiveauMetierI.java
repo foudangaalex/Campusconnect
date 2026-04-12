@@ -5,6 +5,7 @@
 package com.campusconnect.metier;
 
 import com.campusconnect.model.Niveau;
+import dtos.NiveauDTO;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,6 @@ public interface NiveauMetierI {
     Niveau create(Niveau niv);
     Niveau modify(Integer id,Niveau niv);
     String delete(Integer id);
-    List<Niveau> show();
-    Optional<Niveau> findById(Integer id);
+    List<NiveauDTO> show();
+    Optional<NiveauDTO> findById(Integer id);
 }

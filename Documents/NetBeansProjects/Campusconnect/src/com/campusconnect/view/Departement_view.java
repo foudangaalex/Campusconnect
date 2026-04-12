@@ -14,6 +14,7 @@ import com.campusconnect.metier.NiveauMetierImpl;
 import com.campusconnect.model.Departement;
 import com.campusconnect.model.Etudiant;
 import com.campusconnect.model.Niveau;
+import dtos.DepartementDTO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -39,7 +40,7 @@ public class Departement_view extends javax.swing.JPanel {
     public void tableau(){
         DefaultTableModel model=(DefaultTableModel) jTable2.getModel();
         model.setRowCount(0);
-         List<Departement> departements = metier.show();
+         List<DepartementDTO> departements = metier.show();
          departements.forEach(d->{
               Object[] row = {
             d.getId(),

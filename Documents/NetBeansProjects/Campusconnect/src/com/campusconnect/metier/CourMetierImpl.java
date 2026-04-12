@@ -6,6 +6,7 @@ package com.campusconnect.metier;
 
 import com.campusconnect.dao.ConnectionDao;
 import com.campusconnect.model.Cours;
+import dtos.CourDTO;
 import java.util.List;
 import java.util.Optional;
 import java.sql.*;
@@ -30,7 +31,7 @@ public class CourMetierImpl implements CourMetierI{
             pst=con.prepareStatement(sql);
             pst.setString(1, c.getCode());
             pst.setString(2, c.getNom());
-            pst.setInt(3, c.getId_ens());
+            pst.setInt(3, c.getId_prof());
             pst.setInt(4, c.getId_niv());
             pst.setString(5, c.getNbre_heure());
             pst.setInt(6, c.getCoef());
@@ -54,7 +55,7 @@ public class CourMetierImpl implements CourMetierI{
             pst=con.prepareStatement(sql);
             pst.setString(1, c.getCode());
             pst.setString(2, c.getNom());
-            pst.setInt(3, c.getId_ens());
+            pst.setInt(3, c.getId_prof());
             pst.setInt(4, c.getId_niv());
             pst.setString(5, c.getNbre_heure());
             pst.setInt(6, c.getCoef());
@@ -90,21 +91,21 @@ public class CourMetierImpl implements CourMetierI{
     }
 
     @Override
-    public List<Cours> show() {
+    public List<CourDTO> show() {
         con=ConnectionDao.getConnection();
-        String sql="SELECT * FROM cours";
-        List<Cours> cours=new ArrayList<>();
+        String sql="SELECT c.*,prof.nom as nom_prof,niv.nom as nom_niv,sal.nom as nom_sal FROM cours c JOIN professeur prof ON c.id_prof=prof.id JOIN niveau niv ON c.id_niv=niv.id JOIN salle sal ON c.id_sal=sal.id";
+        List<CourDTO> cours=new ArrayList<>();
         try {
             st=con.createStatement();
             rs=st.executeQuery(sql);
             while(rs.next()){
-               Cours cour=new Cours();
+               CourDTO cour=new CourDTO();
                cour.setId(rs.getInt("id"));
                cour.setCode(rs.getString("code"));
                cour.setNom(rs.getString("nom"));
-               cour.setId_ens(rs.getInt("id_ens"));
-               cour.setId_niv(rs.getInt("id_niv"));
-               cour.setId_sal(rs.getInt("id_sal"));
+               cour.setNom_prof(rs.getString("nom_prof"));
+               cour.setNom_niv(rs.getString("nom_niv"));
+               cour.setNom_sal(rs.getString("nom_sal"));
                cour.setNbre_heure(rs.getString("nbre_heure"));
                cour.setCoef(rs.getInt("coef"));
                cours.add(cour);
@@ -117,7 +118,7 @@ public class CourMetierImpl implements CourMetierI{
     }
 
     @Override
-    public Optional<Cours> findById(Integer id) {
+    public Optional<CourDTO> findById(Integer id) {
        return show().stream().filter(cour->Objects.equals(cour.getId(), id)).findFirst();
     }
     

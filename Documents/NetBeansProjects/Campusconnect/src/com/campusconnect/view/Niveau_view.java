@@ -14,12 +14,15 @@ import com.campusconnect.metier.NiveauMetierImpl;
 import com.campusconnect.model.Departement;
 import com.campusconnect.model.Etudiant;
 import com.campusconnect.model.Niveau;
+import dtos.DepartementDTO;
+import dtos.NiveauDTO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,24 +33,36 @@ import javax.swing.table.DefaultTableModel;
 public class Niveau_view extends javax.swing.JPanel {
 
      private NiveauMetierI metier;
+     private DepartementMetierI departementMetierI;
     public Niveau_view() {
         initComponents();
         metier=new NiveauMetierImpl();
+        departementMetierI=new DepartementMetierImpl();
         tableau();
+        idText.setVisible(false);
+        initializeCombo();
     } 
 
     public void tableau(){
         DefaultTableModel model=(DefaultTableModel) jTable2.getModel();
         model.setRowCount(0);
-         List<Niveau> niveaux = metier.show();
+         List<NiveauDTO> niveaux = metier.show();
          niveaux.forEach(d->{
               Object[] row = {
             d.getId(),
-            d.getNom(),      
+            d.getNom_niv(), 
+            d.getNom_dept()
         };
         model.addRow(row);
          });
          
+    }
+    
+    public void initializeCombo(){
+        jComboBox1.removeAllItems();
+        departementMetierI.show().stream().forEach(dep->{
+          jComboBox1.addItem(dep);
+    });
     }
     
     @SuppressWarnings("unchecked")
@@ -58,7 +73,8 @@ public class Niveau_view extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         idText = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -78,8 +94,7 @@ public class Niveau_view extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel1.setText("ID");
+        jLabel3.setText("DEPARTEMENT");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -87,26 +102,29 @@ public class Niveau_view extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(idText, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(idText)
+                    .addComponent(jTextField2)
+                    .addComponent(jComboBox1, 0, 228, Short.MAX_VALUE))
                 .addGap(0, 171, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(127, 127, 127)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(idText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(idText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(55, 55, 55)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(52, 52, 52)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(116, Short.MAX_VALUE))
         );
 
@@ -114,13 +132,13 @@ public class Niveau_view extends javax.swing.JPanel {
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "ID", "NOM"
+                "ID", "NOM", "DEPARTEMENT"
             }
         ));
         jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -224,8 +242,8 @@ public class Niveau_view extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -264,9 +282,11 @@ public class Niveau_view extends javax.swing.JPanel {
                    try {
              Integer id=Integer.parseInt(idText.getText());
              String nom=jTextField2.getText();
+             DepartementDTO depDTO=(DepartementDTO)jComboBox1.getSelectedItem();
              Niveau niv=new Niveau();
              niv.setNom(nom);
              niv.setId(id);
+             niv.setId_dept(depDTO.getId());
              metier.modify(id, niv);
              JOptionPane.showConfirmDialog(this, "  modification reussi?");
              tableau();
@@ -280,8 +300,10 @@ public class Niveau_view extends javax.swing.JPanel {
           try {
               
              String nom=jTextField2.getText();
+             DepartementDTO departement=(DepartementDTO) jComboBox1.getSelectedItem();
              Niveau niv=new Niveau();
              niv.setNom(nom);
+             niv.setId_dept(departement.getId());
              metier.create(niv);
              JOptionPane.showConfirmDialog(this, " enregistrer");
              tableau();
@@ -296,8 +318,10 @@ public class Niveau_view extends javax.swing.JPanel {
          int r = jTable2.getSelectedRow();
              Integer id=Integer.parseInt(jTable2.getValueAt(r, 0).toString());
              String nom=jTable2.getValueAt(r, 1).toString();
+             String departement=jTable2.getValueAt(r, 2).toString();
              idText.setText(id.toString());
              jTextField2.setText(nom);
+             jComboBox1.setSelectedItem(findItemByString(jComboBox1,departement ));
     }//GEN-LAST:event_jTable2MouseClicked
 
     private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
@@ -310,8 +334,9 @@ public class Niveau_view extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField idText;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JComboBox<DepartementDTO> jComboBox1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -323,4 +348,14 @@ public class Niveau_view extends javax.swing.JPanel {
     private javax.swing.JToggleButton jToggleButton3;
     private javax.swing.JToggleButton jToggleButton4;
     // End of variables declaration//GEN-END:variables
+
+    private Object findItemByString(JComboBox combo, String name) {
+            for (int i = 0; i < combo.getItemCount(); i++) {
+        if (combo.getItemAt(i).toString().equals(name)) {
+            return combo.getItemAt(i);
+        }
+    }
+    return null;
+      
+    }
 }

@@ -5,6 +5,7 @@
 package com.campusconnect.metier;
 
 import com.campusconnect.model.Departement;
+import dtos.DepartementDTO;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,6 @@ public interface DepartementMetierI {
     Departement create(Departement d);
     Departement modify(Integer id,Departement d);
     String delete(Integer id);
-    List<Departement> show();
-    Optional<Departement> findById(Integer id);
+    List<DepartementDTO> show();
+    Optional<DepartementDTO> findById(Integer id);
 }
