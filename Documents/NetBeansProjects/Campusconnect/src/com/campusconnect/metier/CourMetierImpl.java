@@ -26,17 +26,13 @@ public class CourMetierImpl implements CourMetierI{
     @Override
     public Cours create(Cours c) {
          con=ConnectionDao.getConnection();
-        String sql="INSERT INTO matiere(code,nom,id_ens ,id_niv, nbre_heure,coef ,id_sal) VALUES(?,?,?,?,?,?,?,?)";
+        String sql="INSERT INTO matiere(code,nom,coef ) VALUES(?,?,?)";
         try {
             pst=con.prepareStatement(sql);
             pst.setString(1, c.getCode());
             pst.setString(2, c.getNom());
-            pst.setInt(3, c.getId_prof());
-            pst.setInt(4, c.getId_niv());
-            pst.setString(5, c.getNbre_heure());
-            pst.setInt(6, c.getCoef());
-            pst.setInt(7, c.getId_sal());
-            pst.setInt(8, c.getId());
+            pst.setInt(3, c.getCoef());
+            
             int executeUpdate = pst.executeUpdate();
             con.close();
         } catch (SQLException ex) {
@@ -49,18 +45,15 @@ public class CourMetierImpl implements CourMetierI{
     @Override
     public Cours modify(Integer id, Cours c) {
         con=ConnectionDao.getConnection();
-        String sql="UPDATE cours SET  code=?,nom=? ,id_ens=? ,id_niv=?, nbre_heure=? ,coef=? ,id_sal=? WHERE id=?";
-        if(findById(id).isPresent()){
+        String sql="UPDATE matiere SET  code=?,nom=?,coef=?  WHERE id=?";
+       
              try {
             pst=con.prepareStatement(sql);
             pst.setString(1, c.getCode());
             pst.setString(2, c.getNom());
-            pst.setInt(3, c.getId_prof());
-            pst.setInt(4, c.getId_niv());
-            pst.setString(5, c.getNbre_heure());
-            pst.setInt(6, c.getCoef());
-            pst.setInt(7, c.getId_sal());
-            pst.setInt(8, c.getId());
+            pst.setInt(3, c.getCoef());
+            
+            pst.setInt(4, c.getId());
             int executeUpdate = pst.executeUpdate();
             con.close();
         } catch (SQLException ex) {
@@ -68,16 +61,15 @@ public class CourMetierImpl implements CourMetierI{
         }
         
         return c;
-        }
-       return null;
+       
     }
 
     @Override
     public String delete(Integer id) {
-       if(findById(id).isPresent()){
+       
              try {
             con=ConnectionDao.getConnection();
-            String sql="DELETE cours WHERE id=?";
+            String sql="DELETE FROM matiere WHERE id=?";
             pst=con.prepareStatement(sql);
             pst.setInt(1, id);
             int executeUpdate = pst.executeUpdate();
@@ -86,14 +78,13 @@ public class CourMetierImpl implements CourMetierI{
                  System.out.println(ex.getMessage());
         }
          return "matiere supprimer avec succes";
-        }
-       return null;
+        
     }
 
     @Override
     public List<CourDTO> show() {
         con=ConnectionDao.getConnection();
-        String sql="SELECT c.*,prof.nom as nom_prof,niv.nom as nom_niv,sal.nom as nom_sal FROM cours c JOIN professeur prof ON c.id_prof=prof.id JOIN niveau niv ON c.id_niv=niv.id JOIN salle sal ON c.id_sal=sal.id";
+        String sql="SELECT * FROM matiere ";
         List<CourDTO> cours=new ArrayList<>();
         try {
             st=con.createStatement();
@@ -103,10 +94,6 @@ public class CourMetierImpl implements CourMetierI{
                cour.setId(rs.getInt("id"));
                cour.setCode(rs.getString("code"));
                cour.setNom(rs.getString("nom"));
-               cour.setNom_prof(rs.getString("nom_prof"));
-               cour.setNom_niv(rs.getString("nom_niv"));
-               cour.setNom_sal(rs.getString("nom_sal"));
-               cour.setNbre_heure(rs.getString("nbre_heure"));
                cour.setCoef(rs.getInt("coef"));
                cours.add(cour);
             }

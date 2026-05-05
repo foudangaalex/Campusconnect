@@ -16,19 +16,15 @@ public class EtudiantDTO {
     private String prenom;
     private String email;
     private Date datnaiss;
-    private String nom_niv;
-    private String nom_fil;
     private String matricule;
     
      public EtudiantDTO(){}
-    public EtudiantDTO(Integer id, String nom, String prenom, String email, Date datnaiss, String nom_niv, String nom_fil, String matricule) {
+    public EtudiantDTO(Integer id, String nom, String prenom, String email, Date datnaiss, String matricule) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.datnaiss = datnaiss;
-        this.nom_niv = nom_niv;
-        this.nom_fil = nom_fil;
         this.matricule = matricule;
     }
 
@@ -80,21 +76,12 @@ public class EtudiantDTO {
         this.datnaiss = datnaiss;
     }
 
-    public String getNom_niv() {
-        return nom_niv;
+    @Override
+    public String toString() {
+        return nom + " " + prenom ;
     }
 
-    public void setNom_niv(String nom_niv) {
-        this.nom_niv = nom_niv;
-    }
-
-    public String getNom_fil() {
-        return nom_fil;
-    }
-
-    public void setNom_fil(String nom_fil) {
-        this.nom_fil = nom_fil;
-    }
+  
     
     
 }

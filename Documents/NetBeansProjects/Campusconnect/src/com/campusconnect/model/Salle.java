@@ -12,13 +12,23 @@ public class Salle {
    private Integer id;
    private String nom;
    private Integer cap_max;
+   private String type;
    
    public Salle(){}
 
-    public Salle(Integer id, String name, Integer cap_max) {
+    public Salle(Integer id, String name, Integer cap_max, String type) {
         this.id = id;
         this.nom = name;
         this.cap_max = cap_max;
+        this.type=type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Integer getId() {
@@ -44,5 +54,9 @@ public class Salle {
     public void setCap_max(Integer cap_max) {
         this.cap_max = cap_max;
     }
-   
+
+    @Override
+    public String toString() {
+        return  nom ;
+    }
 }

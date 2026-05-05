@@ -12,23 +12,18 @@ public class Cours {
     private Integer id;
     private String code;
     private String nom;
-    private Integer id_prof;
-    private Integer id_niv;
-    private String nbre_heure;
     private Integer coef;
-    private Integer id_sal;
+    
     
     public Cours(){}
 
-    public Cours(Integer id, String code, String nom, Integer id_prof, Integer id_niv, String nbre_heure, Integer coef, Integer id_sal) {
+    public Cours(Integer id, String code, String nom, Integer coef) {
         this.id = id;
         this.code = code;
         this.nom = nom;
-        this.id_prof = id_prof;
-        this.id_niv = id_niv;
-        this.nbre_heure = nbre_heure;
+        
         this.coef = coef;
-        this.id_sal = id_sal;
+        
     }
 
     public Integer getId() {
@@ -55,29 +50,9 @@ public class Cours {
         this.nom = nom;
     }
 
-    public Integer getId_prof() {
-        return id_prof;
-    }
+   
 
-    public void setId_prof(Integer id_prof) {
-        this.id_prof = id_prof;
-    }
-
-    public Integer getId_niv() {
-        return id_niv;
-    }
-
-    public void setId_niv(Integer id_niv) {
-        this.id_niv = id_niv;
-    }
-
-    public String getNbre_heure() {
-        return nbre_heure;
-    }
-
-    public void setNbre_heure(String nbre_heure) {
-        this.nbre_heure = nbre_heure;
-    }
+    
 
     public Integer getCoef() {
         return coef;
@@ -87,13 +62,7 @@ public class Cours {
         this.coef = coef;
     }
 
-    public Integer getId_sal() {
-        return id_sal;
-    }
-
-    public void setId_sal(Integer id_sal) {
-        this.id_sal = id_sal;
-    }
+    
 
   
     

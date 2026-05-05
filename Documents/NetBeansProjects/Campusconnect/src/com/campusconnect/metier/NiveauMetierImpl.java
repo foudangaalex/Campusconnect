@@ -42,13 +42,12 @@ public class NiveauMetierImpl implements NiveauMetierI{
     @Override
     public Niveau modify(Integer id, Niveau niv) {
          con=ConnectionDao.getConnection();
-        String sql="UPDATE niveau SET nom=?, id_dept=? WHERE id=?";
+        String sql="UPDATE niveau SET nom=? WHERE id=?";
         
              try {
             pst=con.prepareStatement(sql);
             pst.setString(1, niv.getNom());
-            pst.setInt(2, niv.getId_dept());
-            pst.setInt(3, niv.getId());
+            pst.setInt(2, niv.getId());
             
             int executeUpdate = pst.executeUpdate();
             con.close();
@@ -80,7 +79,7 @@ public class NiveauMetierImpl implements NiveauMetierI{
     @Override
     public List<NiveauDTO> show() {
         con=ConnectionDao.getConnection();
-        String sql="SELECT niv.*,dept.nom as nom_dept FROM niveau niv JOIN departement dept ON niv.id_dept=dept.id ";
+        String sql="SELECT * FROM niveau ";
         List<NiveauDTO> niveaux=new ArrayList<>();
         try {
             st=con.createStatement();
@@ -88,8 +87,7 @@ public class NiveauMetierImpl implements NiveauMetierI{
             while(rs.next()){
                NiveauDTO niv=new NiveauDTO();
                niv.setId(rs.getInt("id"));
-               niv.setNom_niv(rs.getString("nom"));
-               niv.setNom_dept(rs.getString("nom_dept"));
+               niv.setNom(rs.getString("nom"));
                niveaux.add(niv);
             }
             con.close();

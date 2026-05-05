@@ -11,21 +11,14 @@ package com.campusconnect.model;
 public class Niveau {
     private Integer id;
     private String nom;
-    private Integer id_dept;
     public Niveau(){}
 
-    public Niveau(Integer id, String nom,Integer id_dept) {
+    public Niveau(Integer id, String nom) {
         this.id = id;
         this.nom = nom;
     }
 
-    public Integer getId_dept() {
-        return id_dept;
-    }
-
-    public void setId_dept(Integer id_dept) {
-        this.id_dept = id_dept;
-    }
+    
     
     public Integer getId() {
         return id;
