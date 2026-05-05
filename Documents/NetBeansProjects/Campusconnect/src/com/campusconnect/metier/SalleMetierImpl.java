@@ -27,11 +27,12 @@ public class SalleMetierImpl implements SalletMetierI{
     @Override
     public Salle create(Salle s) {
         con=ConnectionDao.getConnection();
-        String sql="INSERT INTO salle (nom,cap_max) VALUES(?,?)";
+        String sql="INSERT INTO salle (nom,capacite,type) VALUES(?,?,?)";
         try {
             pst=con.prepareStatement(sql);
             pst.setString(1, s.getNom());
             pst.setInt(2, s.getCap_max());
+            pst.setString(3, s.getType());
             int executeUpdate = pst.executeUpdate();
             con.close();
         } catch (SQLException ex) {
@@ -44,13 +45,14 @@ public class SalleMetierImpl implements SalletMetierI{
     @Override
     public Salle modify(Integer id, Salle s) {
          con=ConnectionDao.getConnection();
-        String sql="UPDATE salle SET nom=?,cap_max=? WHERE id=?";
-        if(findById(id).isPresent()){
+        String sql="UPDATE salle SET nom=?,capacite=?,type=? WHERE id=?";
+        
              try {
             pst=con.prepareStatement(sql);
             pst.setString(1, s.getNom());
             pst.setInt(2, s.getCap_max());
-            pst.setInt(3, s.getId());
+            pst.setString(3, s.getType());
+            pst.setInt(4, s.getId());
             int executeUpdate = pst.executeUpdate();
             con.close();
         } catch (SQLException ex) {
@@ -58,25 +60,24 @@ public class SalleMetierImpl implements SalletMetierI{
         }
         
         return s;
-        }
-       return null;
+       
     }
 
     @Override
     public String delete(Integer id) {
-        if(findById(id).isPresent()){
+       
              try {
             con=ConnectionDao.getConnection();
-            String sql="DELETE salle WHERE id=?";
+            String sql="DELETE FROM salle WHERE id=?";
             pst=con.prepareStatement(sql);
+            pst.setInt(1, id);
             int executeUpdate = pst.executeUpdate();
             con.close();
         } catch (SQLException ex) {
             Logger.getLogger(SalleMetierImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
          return "departemet supprimer avec succes";
-        }
-       return null;
+        
     }
 
     @Override
@@ -91,7 +92,8 @@ public class SalleMetierImpl implements SalletMetierI{
                Salle salle=new Salle();
                salle.setId(rs.getInt("id"));
                salle.setNom(rs.getString("nom"));
-               salle.setId(rs.getInt("cap_max"));
+               salle.setCap_max(rs.getInt("capacite"));
+               salle.setType(rs.getString("type"));
                salles.add(salle);
             }
             con.close();

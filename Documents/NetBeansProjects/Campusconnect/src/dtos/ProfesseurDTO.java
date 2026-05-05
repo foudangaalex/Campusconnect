@@ -96,7 +96,7 @@ public class ProfesseurDTO {
 
     @Override
     public String toString() {
-        return  nom +""+ prenom+""+ statut ;
+        return  nom ;
     }
 
     

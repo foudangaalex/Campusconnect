@@ -10,15 +10,15 @@ package dtos;
  */
 public class NiveauDTO {
    private Integer id;
-   private String nom_niv;
-   private String nom_dept;
+   private String nom;
+  
    
    public NiveauDTO(){}
 
-    public NiveauDTO(Integer id, String nom_niv, String nom_dept) {
+    public NiveauDTO(Integer id, String nom) {
         this.id = id;
-        this.nom_niv = nom_niv;
-        this.nom_dept = nom_dept;
+        this.nom = nom;
+       
     }
 
     public Integer getId() {
@@ -29,25 +29,19 @@ public class NiveauDTO {
         this.id = id;
     }
 
-    public String getNom_niv() {
-        return nom_niv;
+    public String getNom() {
+        return nom;
     }
 
-    public void setNom_niv(String nom_niv) {
-        this.nom_niv = nom_niv;
+    public void setNom(String nom_niv) {
+        this.nom = nom_niv;
     }
 
-    public String getNom_dept() {
-        return nom_dept;
-    }
-
-    public void setNom_dept(String nom_dept) {
-        this.nom_dept = nom_dept;
-    }
+   
 
     @Override
     public String toString() {
-        return nom_niv ;
+        return nom ;
     }
    
 }
